@@ -1,9 +1,9 @@
-package mytest;
+package enums;
 
-public class EnumTest {
+public class EnumTest1 {
 
     public static void main(String[] args){
-        Size size = Size.SMALL;
+        Size2 size = Size2.SMALL;
         switch (size){
             case LARGE:
                 System.out.println("large"); break;
@@ -15,12 +15,12 @@ public class EnumTest {
                 System.out.println("default");
         }
         System.out.println(Size.valueOf("LARGE") == Size.LARGE);
-        for (Size s : Size.values())
+        for (Size2 s : Size2.values())
             System.out.println(s);
     }
 }
 
-enum Size {
+enum Size2 {
     SMALL, MEDIUM, LARGE
 }
 
