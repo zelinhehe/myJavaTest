@@ -1,7 +1,4 @@
-package mytest;
-
-import com.sun.javafx.tools.packager.PackagerException;
-import proxy.proxyStatic.Hello;
+package containerDemo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
