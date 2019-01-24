@@ -55,9 +55,9 @@ public class BasicDBTest {
         students.put("张三", new Student("张三", 18, 80.9d));
         students.put("李四", new Student("李四", 17, 67.5d));
 
-//        BasicDBTest.saveStudents(students);
-        BasicDBTest.readStudents("张三");
-        BasicDBTest.readStudents("李四");
-        BasicDBTest.readStudents("李");
+        BasicDBTest.saveStudents(students);
+//        BasicDBTest.readStudents("张三");
+//        BasicDBTest.readStudents("李四");
+//        BasicDBTest.readStudents("李");
     }
 }
