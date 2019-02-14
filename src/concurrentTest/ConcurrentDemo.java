@@ -1,9 +1,13 @@
 package concurrentTest;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 // 原子变量
 public class ConcurrentDemo {
@@ -157,5 +161,123 @@ class AccountMgr {
 
     public static void main(String[] args) {
         transferTest();
+    }
+}
+
+class HashMapInfiniteLoop {
+    public static void main(String[] args) {
+//        final Map<Integer, Integer> map = new HashMap<>();
+        final Map<Integer, Integer> map = new ConcurrentHashMap<>();
+        for (int i = 0; i < 1000; i++){
+            Thread t = new Thread() {
+                Random random = new Random();
+
+                @Override
+                public void run() {
+                    for (int i = 0; i < 1000; i++) {
+                        map.put(random.nextInt(), 1);
+                    }
+                }
+            };
+            t.start();
+        }
+    }
+}
+
+// ExecutorService
+class ExecutorServiceTest {
+    static class Task implements Callable<Integer> {
+        @Override
+        public Integer call() throws Exception {
+            int sleepSeconds = new Random().nextInt(1000);
+            Thread.sleep(sleepSeconds);
+            return sleepSeconds;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException{
+        System.out.println("创建一个'执行服务'，提交一个任务 Task，让其异步执行");
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<Integer> future = executorService.submit(new Task());
+
+        System.out.println("执行其他任务");
+        Thread.sleep(100);
+
+        try {
+            System.out.println("获取异步任务结果：" + future.get());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        System.out.println("关闭执行服务");
+        executorService.shutdown();
+    }
+}
+
+// ReentrantReadWriteLock
+class MyCache {
+    private Map<String, Object> map = new HashMap<>();
+    private ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+    private Lock readLock = reentrantReadWriteLock.readLock();
+    private Lock writeLock = reentrantReadWriteLock.writeLock();
+
+    public Object get(String key) {
+        readLock.lock();
+        try {
+            return map.get(key);
+        } finally {
+            readLock.unlock();
+        }
+    }
+    public Object write(String key, Object value) {
+        writeLock.lock();
+        try {
+            return map.put(key, value);
+        } finally {
+            writeLock.unlock();
+        }
+    }
+    public void clear() {
+        writeLock.lock();
+        try {
+            map.clear();
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
+    public static void main(String[] args) {
+        MyCache myCache = new MyCache();
+        myCache.write("a", "aaaaa");
+        myCache.write("b", 12345);
+        myCache.write("c", "ccccc");
+        System.out.println(myCache.get("a"));
+        System.out.println(myCache.get("b"));
+        System.out.println(myCache.get("c"));
+        System.out.println(myCache.get("d"));
+        System.out.println(myCache.get("a"));
+        myCache.clear();
+        System.out.println(myCache.get("a"));
+    }
+}
+
+// Semaphore
+class AccessControlService {
+    public static class ConcurrentLimitException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+    }
+
+    private static final int MAX_PERMITS = 100;
+    private Semaphore permits = new Semaphore(MAX_PERMITS, true);
+
+    public boolean login(String name, String password) {
+        if (!permits.tryAcquire()) {
+            // 同时登录用户数超过限制
+            throw new ConcurrentLimitException();
+        }
+        // 其他验证
+        return true;
+    }
+    public void logout(String name) {
+        permits.release();
     }
 }
