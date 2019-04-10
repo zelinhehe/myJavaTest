@@ -30,10 +30,9 @@ public class CGLibContainer {
             Aspect aspect = cls.getAnnotation(Aspect.class);
             if (aspect != null) {
                 Method before = getMethod(cls, "before", new Class<?>[] { Object.class, Method.class, Object[].class });
-                Method after = getMethod(cls, "after",
-                        new Class<?>[] { Object.class, Method.class, Object[].class, Object.class });
-                Method exception = getMethod(cls, "exception",
-                        new Class<?>[] { Object.class, Method.class, Object[].class, Throwable.class });
+                Method after = getMethod(cls, "after", new Class<?>[] { Object.class, Method.class, Object[].class, Object.class });
+                Method exception = getMethod(cls, "exception", new Class<?>[] { Object.class, Method.class, Object[].class, Throwable.class });
+
                 Class<?>[] intercepttedArr = aspect.value();
                 for (Class<?> interceptted : intercepttedArr) {
                     addInterceptMethod(interceptted, InterceptPoint.BEFORE, before);
@@ -87,8 +86,7 @@ public class CGLibContainer {
         public Object intercept(Object object, Method method,
                                 Object[] args, MethodProxy proxy) throws Throwable {
             //执行before方法
-            List<Method> beforeMethods = getInterceptMethods(
-                    object.getClass().getSuperclass(), InterceptPoint.BEFORE);
+            List<Method> beforeMethods = getInterceptMethods(object.getClass().getSuperclass(), InterceptPoint.BEFORE);
             for (Method m : beforeMethods) {
                 m.invoke(null, new Object[] { object, method, args });
             }
@@ -98,16 +96,14 @@ public class CGLibContainer {
                 Object result = proxy.invokeSuper(object, args);
 
                 // 执行after方法
-                List<Method> afterMethods = getInterceptMethods(
-                        object.getClass().getSuperclass(), InterceptPoint.AFTER);
+                List<Method> afterMethods = getInterceptMethods(object.getClass().getSuperclass(), InterceptPoint.AFTER);
                 for (Method m : afterMethods) {
                     m.invoke(null, new Object[] { object, method, args, result });
                 }
                 return result;
             } catch (Throwable e) {
                 //执行exception方法
-                List<Method> exceptionMethods = getInterceptMethods(
-                        object.getClass().getSuperclass(), InterceptPoint.EXCEPTION);
+                List<Method> exceptionMethods = getInterceptMethods(object.getClass().getSuperclass(), InterceptPoint.EXCEPTION);
                 for (Method m : exceptionMethods) {
                     m.invoke(null, new Object[] { object, method, args, e });
                 }

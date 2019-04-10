@@ -3,7 +3,7 @@ package enums;
 public class EnumTest1 {
 
     public static void main(String[] args){
-        Size2 size = Size2.SMALL;
+        Size1 size = Size1.SMALL;
         switch (size){
             case LARGE:
                 System.out.println("large"); break;
@@ -15,7 +15,7 @@ public class EnumTest1 {
                 System.out.println("default");
         }
         System.out.println(Size.valueOf("LARGE") == Size.LARGE);
-        for (Size2 s : Size2.values())
+        for (Size1 s : Size1.values())
             System.out.println(s);
     }
 }
@@ -31,7 +31,8 @@ enum Size1 {
 
     private String abbr;
     private String title;
-    private Size1(String abbr, String title){
+
+    Size1(String abbr, String title){
         this.abbr = abbr;
         this.title = title;
     }
