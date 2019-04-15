@@ -46,8 +46,13 @@ public class StringTest {
     public static void arraysTest() {
         int[] arr = {9, 8, 4, 3};
         System.out.println(Arrays.toString(arr));
-
         Arrays.sort(arr);
         System.out.println(Arrays.toString(arr));
+
+        String[] arrStr = {"hello", "world", "Break", "abc"};
+        Arrays.sort(arrStr);
+//        Arrays.sort(arrStr, String::compareToIgnoreCase);
+//        Arrays.sort(arrStr, String.CASE_INSENSITIVE_ORDER);
+        System.out.println(Arrays.toString(arrStr));
     }
 }
