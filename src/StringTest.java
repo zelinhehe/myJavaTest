@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collections;
 
 public class StringTest {
 
@@ -53,6 +54,17 @@ public class StringTest {
         Arrays.sort(arrStr);
 //        Arrays.sort(arrStr, String::compareToIgnoreCase);
 //        Arrays.sort(arrStr, String.CASE_INSENSITIVE_ORDER);
+//        Arrays.sort(arrStr, Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
         System.out.println(Arrays.toString(arrStr));
+
+        System.out.println(Arrays.binarySearch(arrStr, "world"));
+
+        System.out.println(Arrays.toString(Arrays.copyOf(arrStr, 2)));
+
+        String[] arrStr2 = {"Break", "abc", "hello", "world"};
+        System.out.println(Arrays.equals(arrStr, arrStr2));
+
+        Arrays.fill(arrStr2, "a");
+        System.out.println(Arrays.toString(arrStr2));
     }
 }
