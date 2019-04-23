@@ -2,6 +2,8 @@ package containerDemo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ArrayListTest
 {
@@ -38,6 +40,12 @@ public class ArrayListTest
     Employee[] staff_array = new Employee[staff.size()];
     staff.toArray(staff_array);
     System.out.println(staff_array[1].getName());
+
+    Integer[] a = {1,2,3,4};
+    List<Integer> list = Arrays.asList(a);
+    System.out.println(list);
+    a[3] = 5;
+    System.out.println(list);
   }
 }
 
