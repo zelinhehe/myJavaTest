@@ -95,10 +95,45 @@ public class ContainerDemo {
         Set<String> set = new HashSet<>();
         set.add("set_a");
         set.add("set_b");
+        set.add("set_e");
         set.add("set_c");
         set.addAll(Arrays.asList(new String[]{"set_a", "set_d"}));
         for (String s : set)
             System.out.print(s + " ");
+
+        class Spec {
+            String size;
+            String color;
+            public Spec(String size, String color) {
+                this.size = size;
+                this.color = color;
+            }
+
+            @Override
+            public String toString() {
+                return "[size=" + size + ", color=" + color + "]";
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Spec spec = (Spec) o;
+                return size.equals(spec.size) &&
+                        color.equals(spec.color);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(size, color);
+            }
+        }
+
+        Set<Spec> set1 = new HashSet<>();
+        set1.add(new Spec("M", "red"));
+        set1.add(new Spec("M", "red"));
+        for (Spec s : set1)
+            System.out.println(s);
     }
 
     public static void treeMap(){
@@ -165,6 +200,15 @@ public class ContainerDemo {
         System.out.println(accessMap);
         accessMap.put("d", 500);
         System.out.println(accessMap);
+    }
+
+    // 有序 set
+    public static void linkedHashSet() {
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
+        linkedHashSet.add("a");
+        linkedHashSet.add("e");
+        linkedHashSet.addAll(Arrays.asList(new String[] {"c", "d", "e"}));
+        System.out.println(linkedHashSet);
     }
 
     public static class LRUCache<K, V> extends LinkedHashMap<K, V> {
@@ -336,12 +380,13 @@ public class ContainerDemo {
 //        treeMap();
 //        treeSet();
 //        linkedHashMap();
+        linkedHashSet();
 //        lruCache();
 //        enumMap();
 //        enumSet();
 //        priorityQueue();
 //        priorityQueue2();
-        medianTest();
+//        medianTest();
     }
 }
 
