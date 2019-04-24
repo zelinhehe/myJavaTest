@@ -29,7 +29,7 @@ public class ContainerDemo {
 
     public static void reverse(){
 //        Deque<String> deque = new LinkedList<>(Arrays.asList(new String[]{"a", "b", "c"}));
-        Deque<String> deque = new ArrayDeque<>(Arrays.asList(new String[]{"a", "b", "c"}));
+        Deque<String> deque = new ArrayDeque<>(Arrays.asList("a", "b", "c"));
         Iterator<String> it = deque.descendingIterator();
         while (it.hasNext())
             System.out.println("deque: " + it.next());
@@ -97,13 +97,14 @@ public class ContainerDemo {
         set.add("set_b");
         set.add("set_e");
         set.add("set_c");
-        set.addAll(Arrays.asList(new String[]{"set_a", "set_d"}));
+//        set.addAll(Arrays.asList(new String[]{"set_a", "set_d"}));
+        set.addAll(Arrays.asList("set_a", "set_d"));
         for (String s : set)
             System.out.print(s + " ");
 
         class Spec {
-            String size;
-            String color;
+            private String size;
+            private String color;
             public Spec(String size, String color) {
                 this.size = size;
                 this.color = color;
@@ -178,7 +179,7 @@ public class ContainerDemo {
 
     public static void treeSet(){
         Set<String> set = new TreeSet<>();
-        set.addAll(Arrays.asList(new String[]{"cc", "aa", "bb", "bb"}));
+        set.addAll(Arrays.asList("cc", "aa", "bb", "bb"));
         System.out.println(set);
     }
 
@@ -207,7 +208,7 @@ public class ContainerDemo {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
         linkedHashSet.add("a");
         linkedHashSet.add("e");
-        linkedHashSet.addAll(Arrays.asList(new String[] {"c", "d", "e"}));
+        linkedHashSet.addAll(Arrays.asList("c", "d", "e"));
         System.out.println(linkedHashSet);
     }
 
@@ -234,11 +235,11 @@ public class ContainerDemo {
     }
 
     public static void enumMap(){
-        List<Clothes> clothes = Arrays.asList(new Clothes[]{
-            new Clothes("C001", Size2.SMALL), new Clothes("C002", Size2.LARGE),
+        List<Clothes> clothes = Arrays.asList(
+                new Clothes("C001", Size2.SMALL), new Clothes("C002", Size2.LARGE),
                 new Clothes("C003", Size2.LARGE), new Clothes("C004", Size2.MEDIUM),
                 new Clothes("C005", Size2.SMALL), new Clothes("C006", Size2.SMALL)
-        });
+        );
         Map<Size2, Integer> map = new EnumMap<>(Size2.class);
         for (Clothes c : clothes){
             Size2 size2 = c.getSize();
@@ -306,9 +307,7 @@ public class ContainerDemo {
         Queue<Integer> pq = new PriorityQueue<>(11, Collections.reverseOrder());
         pq.offer(10);
         pq.add(22);
-        pq.addAll(Arrays.asList(new Integer[]{
-                11, 12, 34, 2, 7, 4, 15, 12, 8, 6, 19, 13
-        }));
+        pq.addAll(Arrays.asList(11, 12, 34, 2, 7, 4, 15, 12, 8, 6, 19, 13));
         while (pq.peek() != null){
             System.out.print(pq.poll() + " ");
         }
@@ -376,15 +375,15 @@ public class ContainerDemo {
 //        stack();
 //        reverse();
 //        hashMap();
-//        hashSet();
+        hashSet();
 //        treeMap();
 //        treeSet();
 //        linkedHashMap();
-        linkedHashSet();
+//        linkedHashSet();
 //        lruCache();
 //        enumMap();
 //        enumSet();
-//        priorityQueue();
+        priorityQueue();
 //        priorityQueue2();
 //        medianTest();
     }
