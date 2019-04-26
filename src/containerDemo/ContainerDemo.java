@@ -146,33 +146,45 @@ public class ContainerDemo {
 //                return o2.compareTo(o1);  // return o1.compareTo(o2);
 //            }
 //        });
+//        Map<String, String> map = new TreeMap<>((o1, o2)->o2.compareTo(o1));
+        Map<String, String> map = new TreeMap<>((o1, o2)->o1.compareTo(o2));
 //        Map<String, String> map = new TreeMap<>(Collections.reverseOrder());
-        Map<String, String> map = new TreeMap<>(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
-        map.put("a", "aa");
-        map.put("d", "dd");
-        map.put("c", "cc");
-        map.put("C", "CC");
-        map.put("BB", "BB");
+//        Map<String, String> map = new TreeMap<>(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
+        map.put("a", "aaa");
+        map.put("d", "ddd");
+        map.put("c", "ccc");
+        map.put("C", "CCC");
+        map.put("B", "BBB");
         for (Map.Entry<String, String> kv : map.entrySet())
             System.out.print(kv.getKey() + ": " + kv.getValue() + " ");
 
         System.out.println();
 //        Map<String, Integer> map2 = new TreeMap<>();
-        Map<String, Integer> map2 = new TreeMap<>(new Comparator<String>() {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    return simpleDateFormat.parse(o1).compareTo(simpleDateFormat.parse(o2));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    return 0;
-                }
+//        Map<String, Integer> map2 = new TreeMap<>(new Comparator<String>() {
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            @Override
+//            public int compare(String o1, String o2) {
+//                try {
+//                    return simpleDateFormat.parse(o1).compareTo(simpleDateFormat.parse(o2));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                    return 0;
+//                }
+//            }
+//        });
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Integer> map2 = new TreeMap<>(((o1, o2) -> {
+            try {
+                return simpleDateFormat.parse(o1).compareTo(simpleDateFormat.parse(o2));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return 0;
             }
-        });
+        }));
         map2.put("2016-7-3", 100);
-        map2.put("2016-7-10", 200);
         map2.put("2016-8-1", 300);
+        map2.put("2017-8-1", 300);
+        map2.put("2016-7-10", 200);
         for (Map.Entry<String, Integer> kv : map2.entrySet())
             System.out.println(kv.getKey() + ": " + kv.getValue());
     }
@@ -184,6 +196,7 @@ public class ContainerDemo {
     }
 
     public static void linkedHashMap(){
+        System.out.println("默认保持插入有序");
         Map<String, Integer> seqMap = new LinkedHashMap<>();
         seqMap.put("c", 300);
         seqMap.put("d", 400);
@@ -191,7 +204,7 @@ public class ContainerDemo {
         seqMap.put("d", 500);
         System.out.println(seqMap);
 
-        System.out.println();
+        System.out.println("指定保持访问有序");
         Map<String, Integer> accessMap = new LinkedHashMap<>(16, 0.75f, true);
         accessMap.put("c", 300);
         accessMap.put("d", 400);
@@ -218,7 +231,7 @@ public class ContainerDemo {
             super(16, 0.75f, true);
             this.maxEntries = maxEntries;
         }
-//        @Override
+        @Override
         protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
             return size() > maxEntries;
         }
@@ -232,22 +245,24 @@ public class ContainerDemo {
         cache.get("a");
         cache.put("d", 456);
         System.out.println(cache);
+        cache.put("e", 12);
+        System.out.println(cache);
     }
 
     public static void enumMap(){
         List<Clothes> clothes = Arrays.asList(
-                new Clothes("C001", Size2.SMALL), new Clothes("C002", Size2.LARGE),
-                new Clothes("C003", Size2.LARGE), new Clothes("C004", Size2.MEDIUM),
-                new Clothes("C005", Size2.SMALL), new Clothes("C006", Size2.SMALL)
+                new Clothes("C001", Size.SMALL), new Clothes("C002", Size.LARGE),
+                new Clothes("C003", Size.LARGE), new Clothes("C004", Size.MEDIUM),
+                new Clothes("C005", Size.SMALL), new Clothes("C006", Size.SMALL)
         );
-        Map<Size2, Integer> map = new EnumMap<>(Size2.class);
+        Map<Size, Integer> map = new EnumMap<>(Size.class);
         for (Clothes c : clothes){
-            Size2 size2 = c.getSize();
-            Integer count = map.get(size2);
+            Size size = c.getSize();
+            Integer count = map.get(size);
             if (count != null)
-                map.put(size2, count + 1);
+                map.put(size, count + 1);
             else
-                map.put(size2, 1);
+                map.put(size, 1);
         }
         System.out.println(map);
     }
@@ -375,15 +390,15 @@ public class ContainerDemo {
 //        stack();
 //        reverse();
 //        hashMap();
-        hashSet();
+//        hashSet();
 //        treeMap();
 //        treeSet();
 //        linkedHashMap();
 //        linkedHashSet();
 //        lruCache();
-//        enumMap();
+        enumMap();
 //        enumSet();
-        priorityQueue();
+//        priorityQueue();
 //        priorityQueue2();
 //        medianTest();
     }
@@ -411,28 +426,28 @@ enum Day {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
 }
 
-enum Size2 {
+enum Size {
     SMALL, MEDIUM, LARGE
 }
 
 class Clothes {
     String id;
-    Size2 size2;
+    Size size;
 
-    public Clothes(String id, Size2 size2){
+    public Clothes(String id, Size size){
         this.id = id;
-        this.size2 = size2;
+        this.size = size;
     }
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setSize(Size2 size) {
-        this.size2 = size;
+    public void setSize(Size size) {
+        this.size = size;
     }
 
-    public Size2 getSize() {
-        return size2;
+    public Size getSize() {
+        return size;
     }
 
     public String getId() {
