@@ -1,7 +1,6 @@
 package a_Decorator;
 
-// -------------------------
-// 饮料抽象类
+// 被装饰对象（饮料）抽象类
 abstract class Beverage {
     String description = "Unknown Beverage";
 
@@ -9,7 +8,7 @@ abstract class Beverage {
 
     public abstract double cost();
 }
-// 调料抽象类
+// 装饰器（调料）抽象类
 abstract class CondimentDecorator extends Beverage {
     Beverage beverage;
     public abstract String getDescription();
@@ -60,6 +59,7 @@ public class Main {
         // 来一杯浓咖啡，不加调料
         Beverage beverage = new Espresso();
         System.out.println(beverage.getDescription() + " $" + beverage.cost());
+
         // 来一杯烘焙咖啡，加两份摩卡，一份牛奶
         Beverage beverage1 = new DarkRoast();
         beverage1 = new Mocha(beverage1);
