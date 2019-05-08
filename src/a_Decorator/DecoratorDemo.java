@@ -54,7 +54,7 @@ class Mocha extends CondimentDecorator {
     public String getDescription() { return beverage.getDescription() + ", Mocha"; }
 }
 
-public class Main {
+public class DecoratorDemo {
     public static void main(String[] args) {
         // 来一杯浓咖啡，不加调料
         Beverage beverage = new Espresso();

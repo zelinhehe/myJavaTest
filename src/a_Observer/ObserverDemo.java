@@ -61,7 +61,7 @@ class ASubject implements Subject {
     }
 }
 
-public class Main {
+public class ObserverDemo {
     public static void main(String[] args) {
         // 新建两个观察者和一个主题
         AObserver aObserver1 = new AObserver("observer 1");
