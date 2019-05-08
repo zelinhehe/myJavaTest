@@ -1,4 +1,4 @@
-package a_Factory;
+package a_Factory.SimpleFactory;
 
 /**
  * SimpleFactory 简单工厂模式
@@ -20,14 +20,14 @@ abstract class Pizza {
 class CheesePizza extends Pizza {
     public CheesePizza() {
         name = "Cheese Pizza";
-        sauce = "Marinara Pizza Sauce";
+        sauce = "Sauce1";
     }
 }
 
 class VeggiePizza extends Pizza {
     public VeggiePizza() {
         name = "Veggie Pizza";
-        sauce = "Marinara sauce";
+        sauce = "Sauce2";
     }
 }
 
