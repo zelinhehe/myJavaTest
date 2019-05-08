@@ -1,4 +1,4 @@
-package a_Factory;
+package a_Factory.FactoryMethod;
 
 /**
  *
