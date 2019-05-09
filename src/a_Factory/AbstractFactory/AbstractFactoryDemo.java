@@ -1,154 +1,49 @@
 package a_Factory.AbstractFactory;
 
-interface Sauce {
-    String toString();
-}
-interface Cheese {
-    String toString();
-}
-interface Veggies {
-    String toString();
-}
-class Mushroom implements Veggies {
+// ------ 原料 ------
+interface Sauce { String toString();}  // 调料接口
+interface Cheese { String toString();}  // 奶酪接口
+class ASauce implements Sauce { public String toString() { return "A Sauce"; }}  // 调料A
+class BSauce implements Sauce { public String toString() { return "B Sauce"; }}  // 调料B
+class ACheese implements Cheese { public String toString() { return "A Cheese"; }}  // 奶酪A
+class BCheese implements Cheese { public String toString() { return "B Cheese"; }}  // 奶酪B
 
-    public String toString() {
-        return "Mushrooms";
-    }
-}
-class MarinaraSauce implements Sauce {
-    public String toString() {
-        return "Marinara Sauce";
-    }
-}
-class PlumTomatoSauce implements Sauce {
-    public String toString() {
-        return "Tomato sauce with plum tomatoes";
-    }
-}
-class ParmesanCheese implements Cheese {
-
-    public String toString() {
-        return "Shredded Parmesan";
-    }
-}
-class ReggianoCheese implements Cheese {
-
-    public String toString() {
-        return "Reggiano Cheese";
-    }
-}
-class MozzarellaCheese implements Cheese {
-
-    public String toString() {
-        return "Shredded Mozzarella";
-    }
-}
-class RedPepper implements Veggies {
-
-    public String toString() {
-        return "Red Pepper";
-    }
-}
-class BlackOlives implements Veggies {
-
-    public String toString() {
-        return "Black Olives";
-    }
-}
-interface PizzaIngredientFactory {
+// ------ 原料工厂 ------
+// 原料工厂接口，提供调料和奶酪
+interface IngredientFactory {
     Sauce createSauce();
     Cheese createCheese();
-    Veggies[] createVeggies();
-
 }
-
-class NYPizzaIngredientFactory implements PizzaIngredientFactory {
-    public Sauce createSauce() {
-        return new MarinaraSauce();
-    }
-
-    public Cheese createCheese() {
-        return new ReggianoCheese();
-    }
-
-    public Veggies[] createVeggies() {
-        Veggies veggies[] = { new Mushroom(), new RedPepper() };
-        return veggies;
-    }
+// 南方口味的原料工厂
+class SouthIngredientFactory implements IngredientFactory {
+    public Sauce createSauce() { return new ASauce(); }
+    public Cheese createCheese() { return new ACheese(); }
 }
-class ChicagoPizzaIngredientFactory implements PizzaIngredientFactory
-{
-
-    public Sauce createSauce() {
-        return new PlumTomatoSauce();
-    }
-
-    public Cheese createCheese() {
-        return new MozzarellaCheese();
-    }
-
-    public Veggies[] createVeggies() {
-        Veggies veggies[] = { new BlackOlives()};
-        return veggies;
-    }
+// 北方口味的原料工厂
+class NouthIngredientFactory implements IngredientFactory {
+    public Sauce createSauce() { return new BSauce(); }
+    public Cheese createCheese() { return new BCheese(); }
 }
+// ------ 披萨 ------
+// 抽象类：披萨
 abstract class Pizza {
     String name;
     Sauce sauce;
-    Veggies veggies[];
     Cheese cheese;
 
     abstract void prepare();
 
-    void bake() {
-        System.out.println("Bake for 25 minutes at 350");
-    }
-
-    void cut() {
-        System.out.println("Cutting the pizza into diagonal slices");
-    }
-
-    void box() {
-        System.out.println("Place pizza in official PizzaStore box");
-    }
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    String getName() {
-        return name;
-    }
-
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append("---- " + name + " ----\n");
-
-        if (sauce != null) {
-            result.append(sauce);
-            result.append("\n");
-        }
-        if (cheese != null) {
-            result.append(cheese);
-            result.append("\n");
-        }
-        if (veggies != null) {
-            for (int i = 0; i < veggies.length; i++) {
-                result.append(veggies[i]);
-                if (i < veggies.length-1) {
-                    result.append(", ");
-                }
-            }
-            result.append("\n");
-        }
-
-        return result.toString();
-    }
+    void bake() { System.out.println("Baking"); }
+    void box() { System.out.println("Boxing"); }
+    void setName(String name) { this.name = name; }
+    String getName() { return name; }
+    public String toString() { return " [ " + name + " ] " + sauce + " | " + cheese; }
 }
-class CheesePizza extends Pizza {
-    PizzaIngredientFactory ingredientFactory;
+// X型披萨
+class XPizza extends Pizza {
+    private IngredientFactory ingredientFactory;
 
-    public CheesePizza(PizzaIngredientFactory ingredientFactory) {
+    public XPizza(IngredientFactory ingredientFactory) {
         this.ingredientFactory = ingredientFactory;
     }
 
@@ -158,10 +53,11 @@ class CheesePizza extends Pizza {
         cheese = ingredientFactory.createCheese();
     }
 }
-class VeggiePizza extends Pizza {
-    PizzaIngredientFactory ingredientFactory;
+// Y型披萨
+class YPizza extends Pizza {
+    private IngredientFactory ingredientFactory;
 
-    public VeggiePizza(PizzaIngredientFactory ingredientFactory) {
+    public YPizza(IngredientFactory ingredientFactory) {
         this.ingredientFactory = ingredientFactory;
     }
 
@@ -169,9 +65,10 @@ class VeggiePizza extends Pizza {
         System.out.println("Preparing " + name);
         sauce = ingredientFactory.createSauce();
         cheese = ingredientFactory.createCheese();
-        veggies = ingredientFactory.createVeggies();
     }
 }
+// ------ 披萨店 ------
+// 抽象类：披萨店
 abstract class PizzaStore {
 
     protected abstract Pizza createPizza(String item);
@@ -181,68 +78,61 @@ abstract class PizzaStore {
         System.out.println("--- Making a " + pizza.getName() + " ---");
         pizza.prepare();
         pizza.bake();
-        pizza.cut();
         pizza.box();
         return pizza;
     }
 }
-class NYPizzaStore extends PizzaStore {
+// 披萨店：北京
+class BeijingPizzaStore extends PizzaStore {
 
     protected Pizza createPizza(String item) {
         Pizza pizza = null;
-        PizzaIngredientFactory ingredientFactory =
-                new NYPizzaIngredientFactory();
+        IngredientFactory ingredientFactory = new NouthIngredientFactory();
 
-        if (item.equals("cheese")) {
-
-            pizza = new CheesePizza(ingredientFactory);
-            pizza.setName("New York Style Cheese Pizza");
-
-        } else if (item.equals("veggie")) {
-
-            pizza = new VeggiePizza(ingredientFactory);
-            pizza.setName("New York Style Veggie Pizza");
-
+        if (item.equals("X")) {
+            pizza = new XPizza(ingredientFactory);
+            pizza.setName("Beijing Style X Pizza");
+        } else if (item.equals("Y")) {
+            pizza = new YPizza(ingredientFactory);
+            pizza.setName("Beijing Style Y Pizza");
         }
         return pizza;
     }
 }
-class ChicagoPizzaStore extends PizzaStore {
+// 披萨店：杭州
+class HangzhouPizzaStore extends PizzaStore {
 
     protected Pizza createPizza(String item) {
         Pizza pizza = null;
-        PizzaIngredientFactory ingredientFactory =
-                new ChicagoPizzaIngredientFactory();
+        IngredientFactory ingredientFactory = new SouthIngredientFactory();
 
-        if (item.equals("cheese")) {
-
-            pizza = new CheesePizza(ingredientFactory);
-            pizza.setName("Chicago Style Cheese Pizza");
-
-        } else if (item.equals("veggie")) {
-
-            pizza = new VeggiePizza(ingredientFactory);
-            pizza.setName("Chicago Style Veggie Pizza");
-
+        if (item.equals("X")) {
+            pizza = new XPizza(ingredientFactory);
+            pizza.setName("Hangzhou Style Cheese Pizza");
+        } else if (item.equals("Y")) {
+            pizza = new YPizza(ingredientFactory);
+            pizza.setName("Hangzhou Style Veggie Pizza");
         }
         return pizza;
     }
 }
+
 public class AbstractFactoryDemo {
     public static void main(String[] args) {
-        PizzaStore nyStore = new NYPizzaStore();
-        PizzaStore chicagoStore = new ChicagoPizzaStore();
+        PizzaStore beiJingStore = new BeijingPizzaStore();
 
-        Pizza pizza = nyStore.orderPizza("cheese");
-        System.out.println("Ethan ordered a " + pizza + "\n");
+        Pizza pizza = beiJingStore.orderPizza("X");
+        System.out.println("ordered a " + pizza + "\n");
 
-        pizza = chicagoStore.orderPizza("cheese");
-        System.out.println("Joel ordered a " + pizza + "\n");
+        pizza = beiJingStore.orderPizza("Y");
+        System.out.println("ordered a " + pizza + "\n");
 
-        pizza = nyStore.orderPizza("veggie");
-        System.out.println("Ethan ordered a " + pizza + "\n");
+        PizzaStore hangZhouStore = new HangzhouPizzaStore();
 
-        pizza = chicagoStore.orderPizza("veggie");
-        System.out.println("Joel ordered a " + pizza + "\n");
+        pizza = hangZhouStore.orderPizza("X");
+        System.out.println("ordered a " + pizza + "\n");
+
+        pizza = hangZhouStore.orderPizza("Y");
+        System.out.println("ordered a " + pizza + "\n");
     }
 }
