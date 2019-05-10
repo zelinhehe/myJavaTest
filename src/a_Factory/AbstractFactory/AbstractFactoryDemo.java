@@ -1,6 +1,6 @@
 package a_Factory.AbstractFactory;
 
-// ------ 原料 ------
+// ------ 原料（产品） ------
 interface Sauce { String toString();}  // 调料接口
 interface Cheese { String toString();}  // 奶酪接口
 class ASauce implements Sauce { public String toString() { return "A Sauce"; }}  // 调料A
@@ -8,7 +8,7 @@ class BSauce implements Sauce { public String toString() { return "B Sauce"; }} 
 class ACheese implements Cheese { public String toString() { return "A Cheese"; }}  // 奶酪A
 class BCheese implements Cheese { public String toString() { return "B Cheese"; }}  // 奶酪B
 
-// ------ 原料工厂 ------
+// ------ 原料工厂（创建产品对象） ------
 // 原料工厂接口，提供调料和奶酪
 interface IngredientFactory {
     Sauce createSauce();
