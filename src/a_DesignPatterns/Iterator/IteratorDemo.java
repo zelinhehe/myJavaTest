@@ -2,6 +2,11 @@ package a_DesignPatterns.Iterator;
 
 import java.util.*;
 
+/**
+ * 三家菜单，现在要合到一起给服务员，服务员把3种菜单一并输出
+ * 由于三家的菜单的存储形式不同，得按三种不同的方式分别遍历 printMenuWithoutIterator
+ * 采用迭代器模式后，直接使用Iterator，无需关心各自的具体实现方式。
+ */
 // 菜单项
 class MenuItem {
     private String name;
