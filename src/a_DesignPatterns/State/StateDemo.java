@@ -10,7 +10,7 @@ interface State {
     void turnCrank();  // 转动
     void dispense();  // 发糖
 
-    void refill();
+    void refill();  // 重置
 }
 
 class NoQuarterState implements State {
@@ -57,13 +57,10 @@ class SoldState implements State {
     public SoldState(GumballMachine gumballMachine) { this.gumballMachine = gumballMachine; }
 
     public void insertQuarter() { System.out.println("Please wait, we're already giving you a gumball"); }
-
     public void ejectQuarter() { System.out.println("Sorry, you already turned the crank"); }
-
     public void turnCrank() {
         System.out.println("Turning twice doesn't get you another gumball!");
     }
-
     public void dispense() {
         gumballMachine.releaseBall();
         if (gumballMachine.getCount() > 0) {
@@ -73,9 +70,7 @@ class SoldState implements State {
             gumballMachine.setState(gumballMachine.getSoldOutState());
         }
     }
-
     public void refill() { }
-
     public String toString() { return "dispensing a gumball"; }
 }
 class SoldOutState implements State {
@@ -87,9 +82,7 @@ class SoldOutState implements State {
     public void ejectQuarter() { System.out.println("You can't eject, you haven't inserted a quarter yet"); }
     public void turnCrank() { System.out.println("You turned, but there are no gumballs"); }
     public void dispense() { System.out.println("No gumball dispensed"); }
-
     public void refill() { gumballMachine.setState(gumballMachine.getNoQuarterState()); }
-
     public String toString() { return "sold out"; }
 }
 
@@ -117,23 +110,18 @@ class GumballMachine {
     }
 
     public void insertQuarter() { state.insertQuarter(); }
-
     public void ejectQuarter() { state.ejectQuarter(); }
-
     public void turnCrank() {
         state.turnCrank();
         state.dispense();
     }
-
     void releaseBall() {
         System.out.println("A gumball comes rolling out the slot...");
         if (count != 0) {
             count = count - 1;
         }
     }
-
     int getCount() { return count; }
-
     void refill(int count) {
         this.count += count;
         System.out.println("The gumball machine was just refilled; it's new count is: " + this.count);
@@ -148,7 +136,7 @@ class GumballMachine {
     public State getSoldState() { return soldState; }
 
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append("\nMighty Gumball, Inc.");
         result.append("\nJava-enabled Standing Gumball Model #2004");
         result.append("\nInventory: " + count + " gumball");
