@@ -13,13 +13,6 @@ import java.util.TimeZone;
 /**
  * 注解的应用：定制序列化
  */
-public class AnnotationTest {
-    public static void main(String[] args) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Student zhangsan = new Student("张三", simpleDateFormat.parse("1990-12-12"));
-        System.out.println(SimpleFormatter.format(zhangsan));
-    }
-}
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -80,7 +73,14 @@ class SimpleFormatter {
             throw new RuntimeException(e);
         }
     }
+}
 
+public class AnnotationTest {
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Student zhangsan = new Student("张三", simpleDateFormat.parse("1990-12-12"));
+        System.out.println(SimpleFormatter.format(zhangsan));
+    }
 }
 
 /**
