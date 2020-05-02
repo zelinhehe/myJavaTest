@@ -1,4 +1,4 @@
-public class Test {
+public class TestA {
     public static void main(String[] args) {
         AnyThing a = new Moon(new Dream(new You(null)));
         a.exe();
