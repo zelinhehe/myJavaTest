@@ -1,8 +1,6 @@
 package concurrentTest;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -189,22 +187,38 @@ class ExecutorServiceTest {
     static class Task implements Callable<Integer> {
         @Override
         public Integer call() throws Exception {
+            System.out.println("begin" + Thread.currentThread().getName());
             int sleepSeconds = new Random().nextInt(1000);
-            Thread.sleep(sleepSeconds);
+            Thread.sleep(5000);
+            System.out.println("end" + Thread.currentThread().getName());
             return sleepSeconds;
         }
     }
 
     public static void main(String[] args) throws InterruptedException{
+        List<Future<Integer>> list = new ArrayList<>();
+
         System.out.println("创建一个'执行服务'，提交一个任务 Task，让其异步执行");
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<Integer> future = executorService.submit(new Task());
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ExecutorService executorService = Executors.newScheduledThreadPool(5);
+        Future<Integer> future1 = executorService.submit(new Task());
+        list.add(future1);
+        Future<Integer> future2 = executorService.submit(new Task());
+        list.add(future2);
 
         System.out.println("执行其他任务");
         Thread.sleep(100);
 
         try {
-            System.out.println("获取异步任务结果：" + future.get());
+            for (Future<Integer> f: list) {
+                while (true) {
+                    if (f.isDone()){
+                        System.out.println("获取异步任务结果：" + f.get() + f.isDone());
+                        break;
+                    }
+                }
+
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
