@@ -295,3 +295,114 @@ class AccessControlService {
         permits.release();
     }
 }
+
+class RacerWithCountDownLatch {
+    static class Racer extends Thread {
+        CountDownLatch latch;
+
+        public Racer(CountDownLatch latch) {
+            this.latch = latch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                this.latch.await();
+                System.out.println(getName() + " start run " + System.currentTimeMillis());
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        int num = 10;
+        CountDownLatch latch = new CountDownLatch(1);
+        Thread[] racers = new Thread[num];
+        for (int i = 0; i < num; i++) {
+            racers[i] = new Racer(latch);
+            racers[i].start();
+        }
+        Thread.sleep(1000 * 5);
+        latch.countDown();
+    }
+}
+
+class MasterWorkerDemo {
+    static class Worker extends Thread {
+        CountDownLatch latch;
+
+        public Worker(CountDownLatch latch) {
+            this.latch = latch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                // 模拟执行任务
+                Thread.sleep((int) (Math.random() * 1000));
+                //􏲔􏲕􏲚􏲛􏲜􏲝 模拟异常情况
+                if (Math.random() < 0.02) {
+                    throw new RuntimeException("bad luck");
+                }
+            } catch (InterruptedException e) {
+            } finally {
+                this.latch.countDown();
+            }
+        }
+
+        public static void main(String[] args) throws InterruptedException {
+            int workerNum = 100;
+            CountDownLatch latch = new CountDownLatch(workerNum);
+            Worker[] workers = new Worker[workerNum];
+            for (int i = 0; i < workerNum; i++) {
+                workers[i] = new Worker(latch);
+                workers[i].start();
+            }
+            latch.await();
+            System.out.println("collect worker results");
+        }
+    }
+}
+
+class CyclicBarrierDemo {
+    static class Tourist extends Thread {
+        CyclicBarrier barrier;
+
+        public Tourist(CyclicBarrier barrier) {
+            this.barrier = barrier;
+        }
+
+        @Override
+        public void run() {
+            try {
+                // 模拟先各自独立运行
+                Thread.sleep((int) (Math.random() * 1000));
+                // 集合点 A
+                barrier.await();
+                System.out.println(this.getName() + " arrived A " + System.currentTimeMillis());
+                Thread.sleep((int) (Math.random() * 1000));
+                // 集合点 B
+                barrier.await();
+                System.out.println(this.getName() + " arrived B " + System.currentTimeMillis());
+            } catch (InterruptedException e) {
+            } catch (BrokenBarrierException e) {
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int num = 3;
+        Tourist[] threads = new Tourist[num];
+        CyclicBarrier barrier = new CyclicBarrier(num, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("all arrived " + System.currentTimeMillis()
+                        + " executed by " + Thread.currentThread().getName());
+            }
+        });
+        for (int i = 0; i < num; i++) {
+            threads[i] = new Tourist(barrier);
+            threads[i].start();
+        }
+    }
+}
