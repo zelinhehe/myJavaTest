@@ -49,7 +49,7 @@ class ChicagoStyleVeggiePizza extends Pizza {
 
 // 披萨店抽象类
 abstract class PizzaStore {
-    // 工厂方法
+    // 工厂方法。工厂方法让类把实例化推迟到子类
     abstract Pizza createPizza(String item);
 
     public Pizza orderPizza(String type) {
@@ -62,7 +62,7 @@ abstract class PizzaStore {
 }
 // 纽约风味披萨店
 class NYPizzaStore extends PizzaStore {
-    @Override
+    @Override  // 子类决定要实例化的类是哪一个
     Pizza createPizza(String item) {
         Pizza pizza = null;
         if (item.equals("cheese")) {

@@ -189,7 +189,7 @@ class ExecutorServiceTest {
         public Integer call() throws Exception {
             System.out.println("begin" + Thread.currentThread().getName());
             int sleepSeconds = new Random().nextInt(1000);
-            Thread.sleep(5000);
+            Thread.sleep(1000 * 200);
             System.out.println("end" + Thread.currentThread().getName());
             return sleepSeconds;
         }
@@ -210,10 +210,18 @@ class ExecutorServiceTest {
         Thread.sleep(100);
 
         try {
+            int times = 0;
             for (Future<Integer> f: list) {
                 while (true) {
                     if (f.isDone()){
                         System.out.println("获取异步任务结果：" + f.get() + f.isDone());
+                        break;
+                    }
+                    Thread.sleep(1000);
+                    times++;
+                    System.out.println("wait " + times);
+                    if (times > 5) {
+                        System.out.println("break");
                         break;
                     }
                 }
@@ -223,7 +231,8 @@ class ExecutorServiceTest {
             e.printStackTrace();
         }
         System.out.println("关闭执行服务");
-        executorService.shutdown();
+//        executorService.shutdown();
+        executorService.shutdownNow();
     }
 }
 
