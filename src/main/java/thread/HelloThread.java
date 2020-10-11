@@ -1,4 +1,4 @@
-package thread;
+package main.java.thread;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -10,14 +10,14 @@ public class HelloThread extends Thread {
     @Override
     public void run() {
 //        System.out.println("hello");
-        System.out.println("thread name: " + Thread.currentThread().getName());
-        System.out.println("thread name: " + Thread.currentThread().getId());
+        System.out.println("main.java.thread name: " + Thread.currentThread().getName());
+        System.out.println("main.java.thread name: " + Thread.currentThread().getId());
     }
 
     public static void main(String[] args) {
         Thread thread = new HelloThread();
         thread.start();
-//        thread.run();
+//        main.java.thread.run();
     }
 }
 
@@ -103,7 +103,7 @@ class VisibilityDemo {
 
     public static void main(String[] args) throws InterruptedException{
         Thread thread = new HelloThread();
-//        thread.setDaemon(true);
+//        main.java.thread.setDaemon(true);
         thread.start();
         Thread.sleep(1000);
         shutdown = true;
