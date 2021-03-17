@@ -228,7 +228,8 @@ public class ContainerDemo {
     public static class LRUCache<K, V> extends LinkedHashMap<K, V> {
         private int maxEntries;
         public LRUCache(int maxEntries) {
-            super(16, 0.75f, true);
+//            super(16, 0.75f, true);
+            super((int) Math.ceil(maxEntries / 0.75) + 1, 0.75f, true);
             this.maxEntries = maxEntries;
         }
         @Override
@@ -242,7 +243,9 @@ public class ContainerDemo {
         cache.put("a", 123);
         cache.put("b", "basic");
         cache.put("c", "call");
+        System.out.println(cache);
         cache.get("a");
+        System.out.println(cache);
         cache.put("d", 456);
         System.out.println(cache);
         cache.put("e", 12);
@@ -395,8 +398,8 @@ public class ContainerDemo {
 //        treeSet();
 //        linkedHashMap();
 //        linkedHashSet();
-//        lruCache();
-        enumMap();
+        lruCache();
+//        enumMap();
 //        enumSet();
 //        priorityQueue();
 //        priorityQueue2();

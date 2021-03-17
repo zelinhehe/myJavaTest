@@ -5,6 +5,11 @@ import java.util.*;
 public class EnumTest {
 
 	public static void main(String[] args) {
+		for (Size s: Size.values()) {
+			System.out.println(s.name());
+			System.out.println(s.ordinal());
+		}
+
 		Scanner in = new Scanner(System.in);
 		System.out.println("Enter a size: (SMALL, MEDIUM, LARGE, EXTRA_LARGE)");
 		String input = in.next().toUpperCase();

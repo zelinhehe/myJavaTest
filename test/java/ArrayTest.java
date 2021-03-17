@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ArrayTest
 {
@@ -29,5 +31,29 @@ public class ArrayTest
         System.out.println(Arrays.toString(luckyNumbers));
         int[] copiedLuckyNumbers = Arrays.copyOf(luckyNumbers, luckyNumbers.length);
         System.out.println(Arrays.toString(copiedLuckyNumbers));
+
+        Integer integer = 3;
+        f(integer);
+        System.out.println(integer);
+
+        String s = "abc";
+        f(s);
+        System.out.println(s);
+
+        List<String> list = new ArrayList<>(Arrays.asList("abc", "b"));
+        f(list);
+        System.out.println(list);
+    }
+
+    public static void f(Integer i) {
+        i += 1;
+    }
+
+    public static void f(String s) {
+        s += "def";
+    }
+
+    public static void f(List<String> list) {
+        list.add("cde");
     }
 }
