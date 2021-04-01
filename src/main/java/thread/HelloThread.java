@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HelloThread extends Thread {
     @Override
@@ -89,12 +90,15 @@ class CounterThread extends Thread {
     }
 }
 
+// 可见性
 class VisibilityDemo {
-    private static boolean shutdown = false;
+//    private static int shutdown = 0;
+//    private static volatile int shutdown = 0;
+    private static AtomicInteger shutdown = new AtomicInteger(0);
     static class HelloThread extends Thread {
         @Override
         public void run() {
-            while (!shutdown){
+            while (shutdown.intValue() == 0){
 
             }
             System.out.println("exit hello");
@@ -106,7 +110,7 @@ class VisibilityDemo {
 //        main.java.thread.setDaemon(true);
         thread.start();
         Thread.sleep(1000);
-        shutdown = true;
+        shutdown.addAndGet(1);
         System.out.println("exit main");
     }
 }

@@ -1,4 +1,4 @@
-package consistency_hash;
+package algorithm.consistency_hash;
 
 import java.util.List;
 import java.util.SortedMap;
